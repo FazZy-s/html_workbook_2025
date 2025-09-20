@@ -1,0 +1,5 @@
+<form action="https://example.com/search" method="get">
+  <label for="q">Search:</label>
+  <input type="text" id="q" name="q" placeholder="Type something...">
+  <input type="submit" value="Search (GET)">
+</form>
