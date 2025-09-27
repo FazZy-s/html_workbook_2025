@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML Workbook - Form Example with Local Video</title>
+</head>
+<body>
+
+<h2>Sample Form with GET Method</h2>
+
+<form action="https://example.com/search" 
+      method="get" 
+      target="_blank" 
+      autocomplete="on" 
+      novalidate 
+      id="userForm">
+
+  <!-- First Name -->
+  <label for="fname">First name:</label>
+  <input type="text" id="fname" name="fname" placeholder="Enter first name" required><br><br>
+
+  <!-- Last Name -->
+  <label for="lname">Last name:</label>
+  <input type="text" id="lname" name="lname" placeholder="Enter last name"><br><br>
+
+  <!-- Favorite Language -->
+  <p>Favorite Language:</p>
+  <input type="radio" id="html" name="fav_language" value="HTML">
+  <label for="html">HTML</label>
+  <input type="radio" id="css" name="fav_language" value="CSS">
+  <label for="css">CSS</label>
+  <input type="radio" id="js" name="fav_language" value="JavaScript">
+  <label for="js">JavaScript</label><br><br>
+
+  <!-- Submit -->
+  <input type="submit" value="Submit Form">
+
+</form>
+
+<hr>
+
+<h2>Local Video Example</h2>
+<!-- Option 1: If you move the video into the same folder as this HTML file -->
+<video width="800" height="450" controls autoplay muted>
+  <source src="13748696_3840_2160_30fps.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<!-- Option 2: If you keep the video in Downloads, use absolute file path -->
+<!--
+<video width="800" height="450" controls autoplay muted>
+  <source src="file:///C:/Users/FazZy/Downloads/13748696_3840_2160_30fps.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+-->
+
+<hr>
+
+<h2>Embedded YouTube Video</h2>
+<iframe width="560" height="315" 
+        src="https://www.youtube.com/embed/qz0aGYrrlhU" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+</iframe>
+
+</body>
+</html>
