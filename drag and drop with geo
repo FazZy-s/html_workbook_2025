@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <style>
+    #div1 {
+      width: 350px;
+      height: 70px;
+      padding: 10px;
+      border: 1px solid #aaaaaa;
+    }
+
+    #map {
+      width: 600px;
+      height: 400px;
+      margin-top: 20px;
+    }
+  </style>
+
+  <!-- Leaflet стили -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    function dragstartHandler(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function dragoverHandler(ev) {
+      ev.preventDefault();
+    }
+
+    function dropHandler(ev) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      ev.target.appendChild(document.getElementById(data));
+    }
+
+    function showLocationOnMap() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            const map = L.map('map').setView([lat, lon], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19,
+            }).addTo(map);
+
+            L.marker([lat, lon]).addTo(map)
+              .bindPopup("Вы здесь: " + lat.toFixed(5) + ", " + lon.toFixed(5))
+              .openPopup();
+          },
+          function(error) {
+            alert("Ошибка при получении местоположения: " + error.message);
+          }
+        );
+      } else {
+        alert("Геолокация не поддерживается вашим браузером.");
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <h1>Drag and Drop API</h1>
+  <p>Перетащи изображение в прямоугольник:</p>
+
+  <div id="div1" ondrop="dropHandler(event)" ondragover="dragoverHandler(event)"></div>
+  <br>
+
+  <img id="img1"
+       src="https://png.klev.club/uploads/posts/2024-05/png-klev-club-qe1v-p-ze-forest-png-1.png"
+       draggable="true"
+       ondragstart="dragstartHandler(event)"
+       style="max-width:336px; max-height:69px;"
+       alt="Forest Image">
+
+  <hr>
+
+  <h2>Моё местоположение</h2>
+  <button onclick="showLocationOnMap()">Показать на карте</button>
+  <div id="map"></div>
+
+</body>
+</html>
