@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drag & Drop + Geolocation</title>
+
+  <!-- Leaflet styles -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <style>
+    /* Top bar */
+    #topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #000;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 12px 0;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+      z-index: 1000;
+    }
+
+    /* General style */
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f4f7fa;
+      color: #333;
+      margin: 0;
+      padding: 60px 20px 20px; /* отступ сверху для панели */
+      text-align: center;
+    }
+
+    header h1 {
+      margin-bottom: 10px;
+      color: #2a3f54;
+    }
+
+    header p {
+      margin-bottom: 30px;
+      color: #555;
+    }
+
+    /* Drop zone */
+    #div1 {
+      width: 350px;
+      height: 100px;
+      margin: 20px auto;
+      border: 2px dashed #777;
+      border-radius: 12px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      color: #666;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    #div1:hover {
+      border-color: #0077cc;
+      background: #eef7ff;
+    }
+
+    /* Image */
+    #img1 {
+      display: block;
+      margin: 20px auto;
+      max-width: 200px;
+      max-height: 80px;
+      border-radius: 8px;
+      cursor: grab;
+      transition: transform 0.3s;
+    }
+
+    #img1:active {
+      cursor: grabbing;
+      transform: scale(0.95);
+    }
+
+    /* Button */
+    button {
+      display: inline-block;
+      background: #0077cc;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 10px 20px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #005fa3;
+    }
+
+    /* Map */
+    #map {
+      width: 100%;
+      max-width: 700px;
+      height: 400px;
+      margin: 20px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+  </style>
+
+  <script>
+    function dragstartHandler(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function dragoverHandler(ev) {
+      ev.preventDefault();
+    }
+
+    function dropHandler(ev) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      ev.target.innerHTML = ""; // clear "Drop here" text
+      ev.target.appendChild(document.getElementById(data));
+    }
+
+    function showLocationOnMap() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            const map = L.map('map').setView([lat, lon], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19,
+            }).addTo(map);
+
+            L.marker([lat, lon]).addTo(map)
+              .bindPopup("You are here: " + lat.toFixed(5) + ", " + lon.toFixed(5))
+              .openPopup();
+          },
+          function(error) {
+            alert("Error while getting location: " + error.message);
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by your browser.");
+      }
+    }
+
+    // плавное исчезновение панели при скролле вниз
+    window.addEventListener("scroll", function() {
+      const topbar = document.getElementById("topbar");
+      if (window.scrollY > 50) {
+        topbar.style.opacity = "0";
+      } else {
+        topbar.style.opacity = "1";
+      }
+    });
+  </script>
+</head>
+<body>
+
+  <div id="topbar">Lecture 4</div>
+
+  <header>
+    <h1>Drag and Drop API</h1>
+    <p>Drag the image into the rectangle:</p>
+  </header>
+
+  <main>
+    <div id="div1" 
+         ondrop="dropHandler(event)" 
+         ondragover="dragoverHandler(event)">
+      Drop here
+    </div>
+
+    <img id="img1"
+         src="https://png.klev.club/uploads/posts/2024-05/png-klev-club-qe1v-p-ze-forest-png-1.png"
+         draggable="true"
+         ondragstart="dragstartHandler(event)"
+         alt="Forest Image">
+
+    <hr>
+
+    <section>
+      <h2>My Location</h2>
+      <button onclick="showLocationOnMap()">Show on Map</button>
+      <div id="map"></div>
+    </section>
+  </main>
+
+</body>
+</html>
