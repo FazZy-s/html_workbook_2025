@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drag & Drop + Geolocation</title>
+
+  <!-- Подключение внешнего CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Leaflet styles -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    function dragstartHandler(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function dragoverHandler(ev) {
+      ev.preventDefault();
+    }
+
+    function dropHandler(ev) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      ev.target.innerHTML = ""; // clear "Drop here" text
+      ev.target.appendChild(document.getElementById(data));
+    }
+
+    function showLocationOnMap() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            const map = L.map('map').setView([lat, lon], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19,
+            }).addTo(map);
+
+            L.marker([lat, lon]).addTo(map)
+              .bindPopup("You are here: " + lat.toFixed(5) + ", " + lon.toFixed(5))
+              .openPopup();
+          },
+          function(error) {
+            alert("Error while getting location: " + error.message);
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by your browser.");
+      }
+    }
+
+    // плавное исчезновение панели при скролле вниз
+    window.addEventListener("scroll", function() {
+      const topbar = document.getElementById("topbar");
+      if (window.scrollY > 50) {
+        topbar.style.opacity = "0";
+      } else {
+        topbar.style.opacity = "1";
+      }
+    });
+  </script>
+</head>
+<body>
+
+  <div id="topbar">Lecture 4</div>
+
+  <header>
+    <h1>Drag and Drop API</h1>
+    <p>Drag the image into the rectangle:</p>
+  </header>
+
+  <main>
+    <div id="div1" 
+         ondrop="dropHandler(event)" 
+         ondragover="dragoverHandler(event)">
+      Drop here
+    </div>
+
+    <img id="img1"
+         src="https://png.klev.club/uploads/posts/2024-05/png-klev-club-qe1v-p-ze-forest-png-1.png"
+         draggable="true"
+         ondragstart="dragstartHandler(event)"
+         alt="Forest Image">
+
+    <hr>
+
+    <section>
+      <h2>My Location</h2>
+      <button onclick="showLocationOnMap()">Show on Map</button>
+      <div id="map"></div>
+    </section>
+  </main>
+
+</body>
+</html>
