@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>COVID-19 Dashboard</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+ 
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>COVID-19 Dashboard</h1>
+    <button id="refreshBtn" class="btn">Refresh</button>
+  </div>
+
+  <div class="stats">
+    <div class="card">
+      <div class="label">Total Cases</div>
+      <div class="value" id="totalCases">—</div>
+    </div>
+    <div class="card">
+      <div class="label">Total Deaths</div>
+      <div class="value" id="totalDeaths">—</div>
+    </div>
+    <div class="card">
+      <div class="label">Recovered</div>
+      <div class="value" id="totalRecovered">—</div>
+    </div>
+    <div class="card">
+      <div class="label">Active</div>
+      <div class="value" id="totalActive">—</div>
+    </div>
+  </div>
+
+  <h2>World Map</h2>
+  <div id="map"></div>
+
+  <h2>Search Countries</h2>
+  <input id="searchInput" type="text" placeholder="Search country..." class="search">
+
+  <table class="countries">
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Cases</th>
+        <th>Deaths</th>
+        <th>Active</th>
+      </tr>
+    </thead>
+    <tbody id="countriesBody"></tbody>
+  </table>
+
+ 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
